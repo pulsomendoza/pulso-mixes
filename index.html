@@ -79,9 +79,11 @@ a{color:inherit}
 .card h3{margin:0;font-size:1.35rem}
 .lnk{all:unset;cursor:pointer;display:block}.lnk:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
 .ing{margin:0;font-size:.88rem;color:var(--muted);flex:1}
-.ing.chips{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:4px}
-.ing.chips li{font-size:.72rem;line-height:1.2;padding:3px 8px;border-radius:99px;background:var(--bg);border:1px solid var(--line);color:var(--ink)}
+.ing.chips{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.ing.chips li{font-size:1rem;line-height:1.3;padding:6px 12px;font-weight:500;border-radius:99px;background:var(--bg);border:1px solid var(--line);color:var(--ink)}
 .sizes{display:flex;gap:8px}
+.ingbtn{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;padding:0 14px;border-radius:12px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font:inherit;font-size:.95rem;font-weight:700;cursor:pointer}
+.ingbtn[aria-expanded="true"]{background:var(--ink);color:#fff}
 .sz-l{margin:2px 0 -2px;font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .size{flex:1;min-height:56px;border-radius:14px;border:2px solid var(--line);background:transparent;font-weight:700;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.15;position:relative;padding:6px 4px}
 .size .gg{font-size:1rem;font-weight:800}.size .pp{font-size:.82rem;font-weight:600;opacity:.8}.size .ck{position:absolute;top:4px;right:8px;font-size:.8rem;font-weight:900}
@@ -450,7 +452,7 @@ const final = (p,g) => p.oferta ? Math.round(p.precios[g]*(1-p.oferta/100)/50)*5
 const comboBase = c => c.items.reduce((a,[id,g,q]) => a + byId(id).precios[g]*q, 0);
 const comboPrice = c => Math.round(comboBase(c)*(1-c.dto/100)/50)*50;
 const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d }catch(e){ return d } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){} } };
-const state = { view:"inicio", goal:"todos", q:"", size:{}, sheet:null, cart:store.get("pulso-cart-2",{}), favs:new Set(store.get("pulso-favs",[])) };
+const state = { view:"inicio", goal:"todos", q:"", size:{}, sheet:null, cart:store.get("pulso-cart-2",{}), favs:new Set(store.get("pulso-favs",[])), ingOpen:new Set() };
 P.forEach(p => state.size[p.id]=500);
 
 const root = document.documentElement.style;
@@ -468,7 +470,7 @@ function cardHtml(p){
     <div class="cbody">
       <p class="kicker">${p.lema}</p>
       <h3 class="disp"><button class="lnk" data-act="open">${p.nombre}</button></h3>
-      <ul class="ing chips">${p.ing.map(i=>`<li>${i}</li>`).join("")}</ul>
+      <button class="ingbtn" data-act="ing" aria-expanded="${state.ingOpen.has(p.id)}">${state.ingOpen.has(p.id)?"Ocultar ingredientes":"Ver qué contiene"}<span aria-hidden="true">${state.ingOpen.has(p.id)?"▴":"▾"}</span></button>${state.ingOpen.has(p.id)?`<ul class="ing chips">${p.ing.map(i=>`<li>${i}</li>`).join("")}</ul>`:""}
       <p class="sz-l">Elegí tu presentación</p><div class="sizes" role="group" aria-label="Presentación">${[200,500].map(s=>`<button class="size" data-act="size" data-g="${s}" aria-pressed="${g===s}"><span class="ck">${g===s?"✓":""}</span><span class="gg">${s} g</span><span class="pp">${money(final(p,s))}</span></button>`).join("")}</div>
       <div class="buy"><div class="price">${priceHtml(p,g)}</div><button class="add" data-act="add">Agregar</button></div>
     </div></article>`;
@@ -571,6 +573,7 @@ document.addEventListener("click",e=>{
   if(act==="open") openSheet(id);
   else if(act==="open-cart") openCart();
   else if(act==="close") closeAll();
+  else if(act==="ing"){ state.ingOpen.has(id)?state.ingOpen.delete(id):state.ingOpen.add(id); renderAll(); }
   else if(act==="size"){ state.size[id]=+a.dataset.g; renderAll(); }
   else if(act==="add") addItem(id+"|"+state.size[id], byId(id).nombre+" "+state.size[id]+" g");
   else if(act==="add-combo") addItem("c:"+cid, COMBOS.find(c=>c.id===cid).nombre);
