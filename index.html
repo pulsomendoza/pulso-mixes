@@ -155,6 +155,7 @@ footer{margin-top:72px;margin-inline:calc(-1*var(--gut));padding-inline:var(--gu
 .line .lp{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
 .d-f{padding:16px 20px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px;background:var(--bg)}
 .tot{display:flex;justify-content:space-between;font-size:1.2rem;font-weight:800;font-variant-numeric:tabular-nums}
+.clr{height:44px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-weight:700;cursor:pointer}.clr.sure{background:#c62828;border-color:#c62828;color:#fff}
 .d-f label{font-size:.82rem;font-weight:700}
 .d-f input{width:100%;height:44px;border-radius:12px;border:1.5px solid var(--line);padding:0 12px;font:inherit;background:var(--surface);color:var(--ink)}
 .wa[aria-disabled="true"]{opacity:.35;pointer-events:none}
@@ -390,6 +391,7 @@ html{-webkit-text-size-adjust:100%}button,a,.card,.chip,.goal{touch-action:manip
     <div class="tot"><span>Total</span><span id="total">$0</span></div>
     <div><label for="who">Tu nombre (opcional)</label><input id="who" type="text" autocomplete="name" placeholder="Así te identificamos"></div>
     <a class="btn wa" id="waBtn" href="#" target="_blank" rel="noopener" aria-disabled="true">Pedir por WhatsApp</a>
+    <button type="button" class="clr" id="clrBtn" data-act="clear" hidden>Vaciar carrito</button>
     <p class="mini">Se abre WhatsApp con tu pedido armado. El pago y la entrega se coordinan por chat.</p>
   </div>
 </aside>
@@ -519,6 +521,7 @@ function renderCart(){
     <div><div class="nm">${l.name}</div><div class="sz">${l.sub}</div>
     <div class="qty"><button data-act="dec" data-k="${l.k}" aria-label="Quitar uno">−</button><span>${l.q}</span><button data-act="inc" data-k="${l.k}" aria-label="Sumar uno">+</button></div></div>
     <div class="lp">${money(l.q*l.unit)}</div></div>`).join("") : `<p class="mini" style="padding:24px 0">Tu carrito está vacío. Sumá un mix o un combo.</p>`;
+  const cb=$("#clrBtn"); cb.hidden=!L.length; if(!L.length){cb.classList.remove("sure");cb.textContent="Vaciar carrito";}
   const who=$("#who").value.trim();
   const msg="Hola Pulso! Quiero hacer este pedido:\n"+L.map(l=>`- ${l.q} x ${l.msg} (${money(l.q*l.unit)})`).join("\n")+`\nTotal: ${money(total)}`+(who?`\nNombre: ${who}`:"");
   const wa=$("#waBtn"); wa.href=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`; wa.setAttribute("aria-disabled",L.length?"false":"true");
@@ -574,6 +577,7 @@ document.addEventListener("click",e=>{
   else if(act==="sheet-size"){ state.size[state.sheet]=+a.dataset.g; renderAll(); openSheet(state.sheet); }
   else if(act==="sheet-add"){ addItem(state.sheet+"|"+state.size[state.sheet], byId(state.sheet).nombre+" "+state.size[state.sheet]+" g"); }
   else if(act==="sheet-open") openSheet(a.dataset.id);
+  else if(act==="clear"){ if(a.classList.contains("sure")){ state.cart={}; renderCart(); toast("Carrito vaciado"); } else { a.classList.add("sure"); a.textContent="¿Seguro? Tocá de nuevo para vaciar"; setTimeout(()=>{a.classList.remove("sure");a.textContent="Vaciar carrito";},4000); } }
   else if(act==="inc"||act==="dec"){ const k=a.dataset.k; state.cart[k]=(state.cart[k]||0)+(act==="inc"?1:-1); if(state.cart[k]<=0) delete state.cart[k]; renderCart(); }
 });
 $("#veil").addEventListener("click",closeAll);
