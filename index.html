@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Pulso Mixes · Alternativa 3: Pedido Rápido</title>
+<title>Pulso Mixes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap">
 <style>
@@ -289,7 +289,24 @@ html{-webkit-text-size-adjust:100%}button,a,.card,.chip,.goal{touch-action:manip
  .qty button{width:42px;height:42px}
  .toast{bottom:auto;top:calc(76px + env(safe-area-inset-top,0px));width:max-content}
 }
-</style></head><body>
+
+/* ===== portada celular: logo grande + buscador bajo la portada ===== */
+@media(max-width:860px){
+ .hdr-in{position:relative;grid-template-columns:1fr;grid-template-areas:"brand";min-height:76px;padding-block:14px}
+ .brand{justify-content:flex-start}
+ .hdr .logo{height:36px}
+ .hero .r{display:none}
+ .hero::after{display:none}
+ .hero .l{padding-bottom:22px}
+ .hero .l{padding:22px 20px 10px}
+ .hero .r{padding:0 22px 14px}
+ .cartbtn{position:absolute;right:0;top:50%;transform:translateY(-50%)}
+ .wrap>.search,.wrap .search{margin:0 0 16px;width:100%;max-width:none}
+ .wrap .view>.hero+.search{margin-top:0}
+ .wrap>.search{margin-top:16px}
+}
+</style><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#ff5a14"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Pulso"><meta name="apple-mobile-web-app-status-bar-style" content="default"></head><body>
 <header class="hdr">
   <div class="hdr-in">
     <a class="brand" href="#inicio" aria-label="Pulso, inicio"><span class="logo" role="img" aria-label="Pulso"></span></a>
@@ -384,20 +401,20 @@ const CONFIG = { whatsapp: "5491159481336", instagram: "tupulsoargentina" }; // 
 const P = [
   {id:"bestia",  nombre:"Modo Bestia",   tipo:"mix", lema:"Fuerza y Rendimiento", color:"#ff2a1a", on:"#1b1b1b",
    ing:["Maní","Nueces","Almendras con chocolate semiamargo","Castañas de cajú tostadas","Pasas de uva","Semillas de zapallo"],
-   precios:{200:6900,500:15900}, oferta:0, img:{200:"bestia200",500:"bestia500"}},
+   precios:{200:7500,500:15000}, oferta:0, img:{200:"bestia200",500:"bestia500"}},
   {id:"chill",   nombre:"Patagonico",     tipo:"mix", lema:"Relax Total", color:"#46d14d", on:"#1b1b1b",
    ing:["Nuez","Almendras","Castañas","Pasas morochas","Arándanos","Frutilla glaseada","Coco en escamas"],
-   precios:{200:6900,500:15900}, oferta:0, img:{200:"chill200",500:"chill500"}},
+   precios:{200:7000,500:14000}, oferta:0, img:{200:"chill200",500:"chill500"}},
   {id:"crunch",  nombre:"Power Crunch",  tipo:"mix", lema:"Energía Natural", color:"#f9b52a", on:"#1b1b1b",
    ing:["Maní tostado","Almendras con sal marina","Pasas de uva","Castañas de cajú tostadas","Escamas de coco tostadas","Semillas de zapallo con sal marina"],
-   precios:{200:6200,500:14500}, oferta:10, img:{200:"crunch200",500:"crunch500"}},
+   precios:{200:7500,500:15000}, oferta:10, img:{200:"crunch200",500:"crunch500"}},
   {id:"sweet",   nombre:"Sweet Crunch",  tipo:"mix", lema:"Placer Sin Culpa", color:"#9b4dff", on:"#ffffff",
    ing:["Maní","Pasas de uva","Almendras con caramelo y sal marina","Nueces con chocolate","Castañas de cajú tostadas","Escamas de coco tostadas"],
-   precios:{200:7200,500:16500}, oferta:0, img:{200:"sweet200",500:"sweet500"}},
+   precios:{200:8000,500:16000}, oferta:0, img:{200:"sweet200",500:"sweet500"}},
   {id:"imperial",nombre:"Mix Imperial",  tipo:"mix", lema:"Selección premium", color:"#3d8bff", on:"#1b1b1b",
-   ing:["Nuez mariposa extra light","Almendras nonpareil","Castañas","Maní tostado"], precios:{200:8900,500:20500}, oferta:0, img:{200:"imperial",500:"imperial"}},
+   ing:["Nuez mariposa extra light","Almendras nonpareil","Castañas","Maní tostado"], precios:{200:8900,500:14000}, oferta:0, img:{200:"imperial",500:"imperial"}},
   {id:"almendras",nombre:"Almendras caramelizadas",tipo:"solo", lema:"Con sal marina", color:"#ff5a14", on:"#1b1b1b",
-   ing:["Almendras caramelizadas con sal marina"], precios:{200:7800,500:18000}, oferta:0, img:{200:"almendras",500:"almendras"}},
+   ing:["Almendras caramelizadas con sal marina"], precios:{200:9000,500:18000}, oferta:0, img:{200:"almendras",500:"almendras"}},
   {id:"coco",    nombre:"Coco tostado",  tipo:"solo", lema:"Escamas tostadas", color:"#d4943f", on:"#1b1b1b",
    ing:["Coco tostado"], precios:{200:4200,500:9500}, oferta:15, img:{200:"coco",500:"coco"}},
   {id:"semillas",nombre:"Mix de semillas",tipo:"solo", lema:"Todo en uno", color:"#a8f843", on:"#1b1b1b",
@@ -572,4 +589,11 @@ const bar=$("#cbar");
 window.onCart=(n,total)=>{bar.hidden=!n;$("#cbN").textContent=n+(n===1?" producto":" productos");$("#cbT").textContent=money(total);};
 renderCart();})();
 </script>
-</body></html>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script><script>
+(function(){var mq=matchMedia("(max-width:860px)"),s=document.querySelector(".hdr .search"),hin=document.querySelector(".hdr-in"),wrap=document.querySelector(".wrap");
+function place(){var q=document.getElementById("q"),had=document.activeElement===q,pos=q.selectionStart;
+ if(!mq.matches){if(s.parentNode!==hin)hin.insertBefore(s,hin.querySelector(".cartbtn"));}
+ else{var v=document.querySelector(".view:not([hidden])");if(v.dataset.view==="inicio"){var h=v.querySelector(".hero");if(h.nextElementSibling!==s)h.after(s);}else if(v.previousElementSibling!==s)v.before(s);}
+ if(had){q.focus();try{q.setSelectionRange(pos,pos)}catch(e){}}}
+addEventListener("hashchange",place);mq.addEventListener("change",place);place();})();
+</script></body></html>
